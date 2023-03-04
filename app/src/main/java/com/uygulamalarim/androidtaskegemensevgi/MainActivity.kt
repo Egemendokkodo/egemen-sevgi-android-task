@@ -20,6 +20,7 @@ import com.google.gson.Gson
 import com.uygulamalarim.androidtaskegemensevgi.Adapter.RecyclerAdapter
 import com.uygulamalarim.androidtaskegemensevgi.DataModel.ModelClassItem
 import com.uygulamalarim.androidtaskegemensevgi.NetworkOperations.NetworkTask
+import com.uygulamalarim.androidtaskegemensevgi.View.ScannerViewActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -75,7 +76,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.qrcodebutton -> {
-                //TODO: create a scannerviewactivity intent
+                val i:Intent=Intent(this, ScannerViewActivity::class.java)
+                startActivity(i)
 
 
                 true

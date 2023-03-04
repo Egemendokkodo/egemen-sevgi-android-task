@@ -49,5 +49,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     //swipe-2-refresh layout as requested
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    //qr code scanner
+    implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
+
 
 }
