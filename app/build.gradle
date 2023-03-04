@@ -51,6 +51,8 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     //qr code scanner
     implementation 'com.github.yuriy-budiyev:code-scanner:2.3.2'
-
+    // we need to request the data from above every 60 minutes.
+    implementation "androidx.work:work-runtime-ktx:2.8.0"
+    implementation "androidx.work:work-rxjava2:2.8.0"
 
 }

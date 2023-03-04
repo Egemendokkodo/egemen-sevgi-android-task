@@ -3,7 +3,6 @@ package com.uygulamalarim.androidtaskegemensevgi.View
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.Camera
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -13,7 +12,6 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
-import com.uygulamalarim.androidtaskegemensevgi.MainActivity
 import com.uygulamalarim.androidtaskegemensevgi.R
 
 class ScannerViewActivity : AppCompatActivity() {
