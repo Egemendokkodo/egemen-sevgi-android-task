@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar_items, menu)
         val manager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
@@ -96,6 +96,39 @@ class MainActivity : AppCompatActivity() {
         searchView.setSearchableInfo(manager.getSearchableInfo(componentName))
         searchView.onActionViewExpanded()
         searchView.clearFocus()
+
+        var qr_scanned_text = intent.getStringExtra("scanned_code")
+
+
+        if (qr_scanned_text!=null){
+            searchView.setQuery(qr_scanned_text,true)
+            AlertDialog.Builder(this)
+                .setTitle("Qr Scan Successful")
+                .setMessage("Scanned message is \"$qr_scanned_text\" please submit the value from above if you approve.")
+                .setPositiveButton("OK"){dialogInterface, which ->
+                    Log.d(this.toString(),"clicked ok button.")
+                }
+                .setIcon(R.drawable.checkicon).show()
+        }
+
+
+
+
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                (recyclerView.adapter as RecyclerAdapter).filter.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                (recyclerView.adapter as RecyclerAdapter).filter.filter(newText)
+
+
+                return true
+            }
+        })
 
         return true
     }
