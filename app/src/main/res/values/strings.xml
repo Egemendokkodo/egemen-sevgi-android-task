@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AndroidTaskEgemenSevgi</string>
+    <string name="search_with_qr">SEARCH WITH QR</string>
+    <string name="search">search</string>
+</resources>
