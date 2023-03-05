@@ -30,7 +30,7 @@ class FetchDataWorker(context: Context, workerParameters: WorkerParameters) : Wo
 
 
     override fun doWork(): Result {
-        Log.d(applicationContext.toString(),"FETCHDATAWORKERDOWORK ÇALIŞTI.")
+        Log.d(applicationContext.toString(),"FETCHDATAWORKERDOWORK EXECUTED.")
         sharedPreferences = applicationContext.getSharedPreferences("jsonString", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
@@ -48,7 +48,7 @@ class FetchDataWorker(context: Context, workerParameters: WorkerParameters) : Wo
 
                 val networkTask = NetworkTask(object : NetworkTask.NetworkTaskListener {
                     override fun onResult(result: String?) {
-                        Log.d("FETCHDATAWORKERRESULT", result ?: "")
+                        Log.d("FETCHDATAWORKERRESULT EXECUTED", result ?: "")
 
 
                         val gson = Gson()

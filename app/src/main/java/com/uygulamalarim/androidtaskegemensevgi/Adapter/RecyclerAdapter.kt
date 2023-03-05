@@ -58,13 +58,13 @@ class RecyclerAdapter(private val dataSet: List<ModelClassItem>) :
                         if (modelClassItem.title.toLowerCase(Locale.ROOT).contains(searchQuery)) {
                             tempList.add(modelClassItem)
                         }
-                        if (modelClassItem.task.toLowerCase(Locale.ROOT).contains(searchQuery)) {
+                        else if (modelClassItem.task.toLowerCase(Locale.ROOT).contains(searchQuery)) {
                             tempList.add(modelClassItem)
                         }
-                        if (modelClassItem.description.toLowerCase(Locale.ROOT).contains(searchQuery)) {
+                        else if (modelClassItem.description.toLowerCase(Locale.ROOT).contains(searchQuery)) {
                             tempList.add(modelClassItem)
                         }
-                        if (modelClassItem.colorCode.toLowerCase(Locale.ROOT).contains(searchQuery)) {
+                        else if (modelClassItem.colorCode.toLowerCase(Locale.ROOT).contains(searchQuery)) {
                             tempList.add(modelClassItem)
                         }
 

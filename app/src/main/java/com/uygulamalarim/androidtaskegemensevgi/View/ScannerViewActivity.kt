@@ -61,4 +61,5 @@ class ScannerViewActivity : AppCompatActivity() {
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 100
     }
+
 }
