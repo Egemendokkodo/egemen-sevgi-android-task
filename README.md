@@ -1,4 +1,4 @@
-The task has been completed, and I have attached the corresponding screenshots for your review <br>
+The task has been completed, and I have attached the corresponding screenshots for your review: <br>
 <img src="https://user-images.githubusercontent.com/70278989/222992203-0a4b0b9e-d058-4119-bf06-da8ebfa04053.jpeg" alt="1" width="250"/> <br>
 <img src="https://user-images.githubusercontent.com/70278989/222992203-0a4b0b9e-d058-4119-bf06-da8ebfa04053.jpeg" alt="1" width="250"/> <br>
 <img src="https://user-images.githubusercontent.com/70278989/222992206-aefc7e55-81e0-4730-a3b3-843a28ce71d9.jpeg" alt="2" width="250"/> <br>
