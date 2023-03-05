@@ -1,6 +1,7 @@
 package com.uygulamalarim.androidtaskegemensevgi.View
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,8 +28,10 @@ import com.uygulamalarim.androidtaskegemensevgi.DataModel.ModelClassItem
 import com.uygulamalarim.androidtaskegemensevgi.NetworkOperations.NetworkTask
 import com.uygulamalarim.androidtaskegemensevgi.R
 import com.uygulamalarim.androidtaskegemensevgi.Worker.FetchDataWorker
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -40,27 +45,19 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var searchView: SearchView
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
         sharedPreferences = applicationContext.getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         val jsonString = sharedPreferences.getString("jsonString", null)
 
 
-        swipeRefreshLayout.setOnRefreshListener {
-            if(isNetworkAvailable()){
-                fetchDataFromAPI()
-                swipeRefreshLayout.isRefreshing = false
-            }else{
-                Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show()
-                displayData()
-                swipeRefreshLayout.isRefreshing = false
-            }
-
-        }
+        swipeRefreshAction()
 
         if (isNetworkAvailable()) {
             fetchDataFromAPI()
@@ -87,6 +84,22 @@ class MainActivity : AppCompatActivity() {
             fetchWorkRequest)
 
     }
+    private fun swipeRefreshAction(){ // swipe-2-refresh functionality
+        val swipeRefreshLayout = findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            if(isNetworkAvailable()){
+                fetchDataFromAPI()
+                swipeRefreshLayout.isRefreshing = false
+
+
+            }else{
+                Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show()
+                displayData()
+                swipeRefreshLayout.isRefreshing = false
+            }
+
+        }
+    }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -94,6 +107,8 @@ class MainActivity : AppCompatActivity() {
             R.id.qrcodebutton -> {
                 val i:Intent=Intent(this, ScannerViewActivity::class.java)
                 startActivity(i)
+                this.finish()
+
 
 
                 true
@@ -113,6 +128,7 @@ class MainActivity : AppCompatActivity() {
         searchView.onActionViewExpanded()
         searchView.clearFocus()
 
+
         var qr_scanned_text = intent.getStringExtra("scanned_code")
 
 
@@ -122,10 +138,17 @@ class MainActivity : AppCompatActivity() {
                 .setTitle("Qr Scan Successful")
                 .setMessage("Scanned message is \"$qr_scanned_text\" please submit the value from above if you approve.")
                 .setPositiveButton("OK"){dialogInterface, which ->
-                    Log.d(this.toString(),"clicked ok button.")
+                    if(isNetworkAvailable()){
+                        fetchDataFromAPI()
+
+                    }else{
+                        Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show()
+                        displayData()
+                    }
                 }
                 .setIcon(R.drawable.checkicon).show()
         }
+
 
 
 
@@ -149,22 +172,28 @@ class MainActivity : AppCompatActivity() {
         return true
     }
     private fun fetchDataFromAPI() {
+        var  progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE // ProgressBar görünür hale getiriliyor
         GlobalScope.launch {
             val networkTask = NetworkTask(object : NetworkTask.NetworkTaskListener {
                 override fun onResult(result: String?) {
                     Log.d("Resultante importante", result ?: "")
-                    val jsonString = result
-
                     val gson = Gson()
-                    modelClassItemList = gson.fromJson(jsonString, Array<ModelClassItem>::class.java).toList()
-
-                    editor.putString("jsonString", jsonString)
-                    editor.apply()
-
-
-                    runOnUiThread {
-                        displayData()
+                    if (result == null) {
+                        runOnUiThread {
+                            displayData()
+                            progressBar.visibility = View.GONE
+                        }
+                    } else {
+                        modelClassItemList = gson.fromJson(result, Array<ModelClassItem>::class.java).toList()
+                        editor.putString("jsonString", result)
+                        editor.apply()
+                        runOnUiThread {
+                            displayData()
+                            progressBar.visibility = View.GONE
+                        }
                     }
+
                 }
             })
             networkTask.execute(url1, url2)

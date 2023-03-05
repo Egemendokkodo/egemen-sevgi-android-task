@@ -28,9 +28,10 @@ class FetchDataWorker(context: Context, workerParameters: WorkerParameters) : Wo
     private var modelClassItemList = emptyList<ModelClassItem>()
 
 
+
     override fun doWork(): Result {
         Log.d(applicationContext.toString(),"FETCHDATAWORKERDOWORK ÇALIŞTI.")
-        sharedPreferences = applicationContext.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        sharedPreferences = applicationContext.getSharedPreferences("jsonString", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
         if (isNetworkAvailable()) {
@@ -48,16 +49,22 @@ class FetchDataWorker(context: Context, workerParameters: WorkerParameters) : Wo
                 val networkTask = NetworkTask(object : NetworkTask.NetworkTaskListener {
                     override fun onResult(result: String?) {
                         Log.d("FETCHDATAWORKERRESULT", result ?: "")
-                        val jsonString = result
+
 
                         val gson = Gson()
-                        modelClassItemList = gson.fromJson(jsonString, Array<ModelClassItem>::class.java).toList()
 
-                        editor.putString("jsonString", jsonString)
-                        editor.apply()
+                        if (result==null){
+                            (applicationContext as Activity).runOnUiThread {
+                                displayData()
+                            }
+                        }else{
+                            modelClassItemList = gson.fromJson(result, Array<ModelClassItem>::class.java).toList()
+                            editor.putString("jsonString", result)
+                            editor.apply()
 
-                        (applicationContext as Activity).runOnUiThread {
                             displayData()
+
+
                         }
                     }
                 })

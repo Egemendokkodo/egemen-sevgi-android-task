@@ -2,4 +2,6 @@
     <string name="app_name">AndroidTaskEgemenSevgi</string>
     <string name="search_with_qr">SEARCH WITH QR</string>
     <string name="search">search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

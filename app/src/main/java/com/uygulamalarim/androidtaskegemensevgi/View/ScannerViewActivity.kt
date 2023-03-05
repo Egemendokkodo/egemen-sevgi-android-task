@@ -30,7 +30,7 @@ class ScannerViewActivity : AppCompatActivity() {
                 val i = Intent(this, MainActivity::class.java)
                 i.putExtra("scanned_code",it.text)
                 startActivity(i)
-                this.finish()
+
             }
         }
 

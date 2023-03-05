@@ -1,11 +1,16 @@
 package com.uygulamalarim.androidtaskegemensevgi.NetworkOperations
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.json.JSONObject
 import java.io.IOException
 
 class NetworkTask(private val listener: NetworkTaskListener) {
+
+
 
     interface NetworkTaskListener {
         fun onResult(result: String?)
@@ -26,26 +31,28 @@ class NetworkTask(private val listener: NetworkTaskListener) {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
-                val responseString = response.body?.string()
-                val jsonObject = JSONObject(responseString)
-                val oauthObject = jsonObject.getJSONObject("oauth")
-                val token = oauthObject.getString("access_token")
 
-                val tasksRequest = Request.Builder()
-                    .url(tasksUrl)
-                    .addHeader("Authorization", "Bearer $token")
-                    .build()
+                    val responseString = response.body?.string()
+                    val jsonObject = responseString?.let { JSONObject(it) }
+                    val oauthObject = jsonObject?.getJSONObject("oauth")
+                    val token = oauthObject?.getString("access_token")
 
-                client.newCall(tasksRequest).enqueue(object : Callback {
-                    override fun onResponse(call: Call, response: Response) {
-                        val result = response.body?.string()
-                        listener.onResult(result)
-                    }
+                    val tasksRequest = Request.Builder()
+                        .url(tasksUrl)
+                        .addHeader("Authorization", "Bearer $token")
+                        .build()
 
-                    override fun onFailure(call: Call, e: IOException) {
-                        listener.onResult(null)
-                    }
-                })
+                    client.newCall(tasksRequest).enqueue(object : Callback {
+                        override fun onResponse(call: Call, response: Response) {
+                            val result = response.body?.string()
+                            listener.onResult(result)
+                        }
+
+                        override fun onFailure(call: Call, e: IOException) {
+                            listener.onResult(null)
+                        }
+                    })
+
             }
 
             override fun onFailure(call: Call, e: IOException) {
