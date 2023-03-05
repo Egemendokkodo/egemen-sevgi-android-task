@@ -1,5 +1,6 @@
 The task has been completed, and I have attached the corresponding screenshots for your review
-![1](https://user-images.githubusercontent.com/70278989/222992203-0a4b0b9e-d058-4119-bf06-da8ebfa04053.jpeg) <br>
+<img src="https://user-images.githubusercontent.com/70278989/222992203-0a4b0b9e-d058-4119-bf06-da8ebfa04053.jpeg" alt="1" width="250"/>
+ <br>
 ![2](https://user-images.githubusercontent.com/70278989/222992206-aefc7e55-81e0-4730-a3b3-843a28ce71d9.jpeg) <br>
 ![3](https://user-images.githubusercontent.com/70278989/222992208-345983c1-ea5a-4584-bfd0-48e77b7a685c.jpeg) <br>
 ![4](https://user-images.githubusercontent.com/70278989/222992212-d1f211ee-f964-4ac3-beb5-a89977e68c20.jpeg) <br>
