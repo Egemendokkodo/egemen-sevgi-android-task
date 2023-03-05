@@ -18,17 +18,12 @@ class ScannerViewActivity : AppCompatActivity() {
 
     private lateinit var codeScanner: CodeScanner
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner_view)
 
-
-
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
-
         codeScanner = CodeScanner(this, scannerView)
-
 
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
@@ -36,25 +31,20 @@ class ScannerViewActivity : AppCompatActivity() {
                 i.putExtra("scanned_code",it.text)
                 startActivity(i)
                 this.finish()
-
             }
         }
-
 
         scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             codeScanner.startPreview()
             codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
-                runOnUiThread {
-                    Toast.makeText(this, "Camera initialization error: ${it.message}",
-                        Toast.LENGTH_LONG).show()
-                }
+                Toast.makeText(this, "Camera initialization error: ${it.message}", Toast.LENGTH_LONG).show()
             }
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         }
     }
 
@@ -67,8 +57,6 @@ class ScannerViewActivity : AppCompatActivity() {
         codeScanner.releaseResources()
         super.onPause()
     }
-
-
 
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 100

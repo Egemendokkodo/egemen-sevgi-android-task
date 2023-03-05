@@ -50,6 +50,32 @@ class MainActivity : AppCompatActivity() {
         val jsonString = sharedPreferences.getString("jsonString", null)
 
 
+        swipeRefreshLayout.setOnRefreshListener {
+            if(isNetworkAvailable()){
+                fetchDataFromAPI()
+                swipeRefreshLayout.isRefreshing = false
+            }else{
+                Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show()
+                displayData()
+                swipeRefreshLayout.isRefreshing = false
+            }
+
+        }
+
+        if (isNetworkAvailable()) {
+            fetchDataFromAPI()
+
+        }else{
+            if (jsonString == null) {
+                Toast.makeText(this, "No Internet Connection, You need to connect to the internet at least 1 time", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No Internet Connection but Showing the Last Data From When You are Last Online ", Toast.LENGTH_SHORT).show()
+                val gson = Gson()
+                modelClassItemList = gson.fromJson(jsonString, Array<ModelClassItem>::class.java).toList()
+                displayData()
+            }
+        }
+
         val fetchWorkRequest = PeriodicWorkRequest.Builder(
             FetchDataWorker::class.java,
             60, TimeUnit.MINUTES)
@@ -60,34 +86,8 @@ class MainActivity : AppCompatActivity() {
             ExistingPeriodicWorkPolicy.KEEP,
             fetchWorkRequest)
 
-
-        if (isNetworkAvailable()) {
-            fetchDataFromAPI()
-            swipeRefreshLayout.setOnRefreshListener {
-                fetchDataFromAPI()
-                swipeRefreshLayout.isRefreshing = false
-            }
-
-        }else{
-            if (jsonString == null) {
-                Toast.makeText(this, "No Internet Connection, You need to connect to the internet at least 1 time", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "No Internet Connection but Showing the Last Data From When You are Last Online ", Toast.LENGTH_SHORT).show()
-                val gson = Gson()
-                modelClassItemList = gson.fromJson(jsonString, Array<ModelClassItem>::class.java).toList()
-
-                displayData()
-                swipeRefreshLayout.setOnRefreshListener {
-                    Toast.makeText(this, "No internet connection.", Toast.LENGTH_SHORT).show()
-                    displayData()
-                    swipeRefreshLayout.isRefreshing = false
-                }
-
-
-            }
-        }
-
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
