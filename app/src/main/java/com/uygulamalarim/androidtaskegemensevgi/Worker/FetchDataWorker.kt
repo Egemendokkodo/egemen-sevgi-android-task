@@ -79,8 +79,8 @@ class FetchDataWorker(context: Context, workerParameters: WorkerParameters) : Wo
 
     private fun displayData() {
         val adapter = RecyclerAdapter(modelClassItemList)
-        val recyclerView = (applicationContext as Activity).findViewById<RecyclerView>(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
+        val recyclerView = (applicationContext.applicationContext as Activity).findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(applicationContext.applicationContext)
         recyclerView.adapter = adapter
     }
 
